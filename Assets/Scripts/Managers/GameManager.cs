@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float maxPlatformWidth = 2.8f;
     [SerializeField] private float minGap = 1.8f;
     [SerializeField] private float maxGap = 3.5f;
-    [SerializeField] private float platformY = -3.5f;
+    [SerializeField] private float platformTopY  = -3.25f; // altura do topo de todos os pilares
+    [SerializeField] private float pillarHeight  = 8f;     // altura do pilar (some abaixo da tela)
 
     public Platform CurrentPlatform { get; private set; }
     public Platform NextPlatform    { get; private set; }
@@ -34,8 +35,9 @@ public class GameManager : MonoBehaviour
         float gap = Random.Range(minGap, maxGap);
         float x   = CurrentPlatform.RightEdge + gap + w / 2f;
 
-        GameObject obj = Instantiate(platformPrefab, new Vector3(x, platformY, 0f), Quaternion.identity);
-        obj.transform.localScale = new Vector3(w, 0.5f, 1f);
+        float centerY = platformTopY - pillarHeight / 2f;
+        GameObject obj = Instantiate(platformPrefab, new Vector3(x, centerY, 0f), Quaternion.identity);
+        obj.transform.localScale = new Vector3(w, pillarHeight, 1f);
         obj.name = "Platform_Next";
 
         NextPlatform = obj.GetComponent<Platform>();

@@ -23,12 +23,15 @@ public class BridgeVerifier : MonoBehaviour
 
     private void Verify()
     {
-        float tipX       = BridgeController.Instance.GetBridgeTipX();
-        Platform next    = GameManager.Instance.NextPlatform;
+        float tipX    = BridgeController.Instance.GetBridgeTipX();
+        Platform next = GameManager.Instance.NextPlatform;
 
-        bool success = tipX >= next.LeftEdge && tipX <= next.RightEdge;
+        bool success = tipX >= next.LeftEdge - 0.05f && tipX <= next.RightEdge + 0.05f;
+        bool perfect = tipX >= next.PerfectLeftEdge   && tipX <= next.PerfectRightEdge;
 
-        if (success)
+        if (success && perfect)
+            OnPerfect();
+        else if (success)
             OnSuccess();
         else
             OnFail();
@@ -36,11 +39,21 @@ public class BridgeVerifier : MonoBehaviour
 
     private void OnSuccess()
     {
+        ScoreManager.Instance.AddPoint(perfect: false);
+        PlayerController.Instance.WalkToNextPlatform();
+    }
+
+    private void OnPerfect()
+    {
+        GameManager.Instance.NextPlatform.TriggerPerfectFeedback();
+        ScoreManager.Instance.AddPoint(perfect: true);
+        UIManager.Instance.ShowPerfect();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
     private void OnFail()
     {
+        ScoreManager.Instance.ResetCombo();
         PlayerController.Instance.FallDown();
     }
 
