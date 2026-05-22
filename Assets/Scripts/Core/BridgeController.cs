@@ -58,6 +58,22 @@ public class BridgeController : MonoBehaviour
 
     private void StartGrowing()
     {
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("GameManager nao encontrado na cena!");
+            return;
+        }
+        if (GameManager.Instance.CurrentPlatform == null)
+        {
+            Debug.LogError("CurrentPlatform esta nulo! Platform_Start tem o script Platform?");
+            return;
+        }
+        if (bridgePrefab == null)
+        {
+            Debug.LogError("Bridge Prefab nao atribuido no BridgeController!");
+            return;
+        }
+
         State        = BridgeState.Growing;
         BridgeLength = 0f;
         fallAngle    = 0f;
