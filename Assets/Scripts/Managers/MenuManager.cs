@@ -1,68 +1,60 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
-    [Header("UI")]
+    [Header("Textos")]
     [SerializeField] private TMP_Text bestScoreText;
-    [SerializeField] private TMP_Text tapToPlayText;
 
-    private bool canPlay = false;
+    [Header("Paineis (para implementar depois)")]
+    [SerializeField] private GameObject painelLoja;
+    [SerializeField] private GameObject painelRanking;
+    [SerializeField] private GameObject painelDesafios;
+    [SerializeField] private GameObject painelOpcoes;
+    [SerializeField] private GameObject painelPerfil;
 
     private void Start()
     {
         int best = PlayerPrefs.GetInt("BestScore", 0);
         bestScoreText.text = best > 0 ? "MELHOR: " + best : "";
 
-        StartCoroutine(PulseTapText());
-
-        // Pequeno delay para nao iniciar imediatamente ao entrar na cena
-        Invoke(nameof(EnablePlay), 0.5f);
+        // Garante paineis fechados
+        FecharTodosPaineis();
     }
 
-    private void EnablePlay() => canPlay = true;
-
-    private void Update()
+    // ── Botao principal ────────────────────────────────
+    public void OnJogarClick()
     {
-        if (!canPlay) return;
-
-        bool tapped = (Mouse.current      != null && Mouse.current.leftButton.wasPressedThisFrame)
-                   || (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame);
-
-        if (tapped)
-            StartCoroutine(LoadGame());
+        StartCoroutine(CarregarJogo());
     }
 
-    private IEnumerator LoadGame()
+    private IEnumerator CarregarJogo()
     {
-        canPlay = false;
-        // Pequena pausa antes de carregar para nao cortar a animacao
-        yield return new WaitForSeconds(0.15f);
+        yield return new WaitForSeconds(0.1f);
         SceneManager.LoadScene("GameScene");
     }
 
-    // Animacao de pulso no texto "TOQUE PARA JOGAR"
-    private IEnumerator PulseTapText()
+    // ── Botoes secundarios ─────────────────────────────
+    public void OnLojaClick()      => AbrirPainel(painelLoja);
+    public void OnRankingClick()   => AbrirPainel(painelRanking);
+    public void OnDesafiosClick()  => AbrirPainel(painelDesafios);
+    public void OnOpcoesClick()    => AbrirPainel(painelOpcoes);
+    public void OnPerfilClick()    => AbrirPainel(painelPerfil);
+
+    public void FecharTodosPaineis()
     {
-        while (true)
-        {
-            float t = 0f;
-            while (t < 1f)
-            {
-                t += Time.deltaTime / 0.8f;
-                tapToPlayText.alpha = Mathf.Lerp(0.2f, 1f, t);
-                yield return null;
-            }
-            t = 0f;
-            while (t < 1f)
-            {
-                t += Time.deltaTime / 0.8f;
-                tapToPlayText.alpha = Mathf.Lerp(1f, 0.2f, t);
-                yield return null;
-            }
-        }
+        painelLoja?.SetActive(false);
+        painelRanking?.SetActive(false);
+        painelDesafios?.SetActive(false);
+        painelOpcoes?.SetActive(false);
+        painelPerfil?.SetActive(false);
+    }
+
+    private void AbrirPainel(GameObject painel)
+    {
+        FecharTodosPaineis();
+        painel?.SetActive(true);
     }
 }
