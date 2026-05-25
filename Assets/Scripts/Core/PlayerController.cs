@@ -76,8 +76,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnGameOver()
     {
-        Debug.Log("GAME OVER");
-        // Passo 10: tela de game over aqui
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        ScoreManager.Instance.SaveHighScore();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MenuScene");
     }
 }

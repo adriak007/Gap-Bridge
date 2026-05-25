@@ -1924,9 +1924,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   scoreText: {fileID: 362687604}
   perfectText: {fileID: 926555820}
-  comboText: {fileID: 0}
-  comboTimerBar: {fileID: 0}
-  comboContainer: {fileID: 0}
+  comboText: {fileID: 964266008}
+  comboTimerBar: {fileID: 971494631}
+  comboContainer: {fileID: 966606558}
 --- !u!1 &2145922731
 GameObject:
   m_ObjectHideFlags: 0

@@ -71,4 +71,12 @@ public class ScoreManager : MonoBehaviour
         comboActive         = false;
         UIManager.Instance.HideCombo();
     }
+
+    public void SaveHighScore()
+    {
+        int current = PlayerPrefs.GetInt("BestScore", 0);
+        if (Score > current)
+            PlayerPrefs.SetInt("BestScore", Score);
+        PlayerPrefs.Save();
+    }
 }
