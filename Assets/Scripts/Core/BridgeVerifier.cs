@@ -39,21 +39,21 @@ public class BridgeVerifier : MonoBehaviour
 
     private void OnSuccess()
     {
-        ScoreManager.Instance.AddPoint(perfect: false);
+        ScoreManager.Instance.AddNormalPoint();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
     private void OnPerfect()
     {
         GameManager.Instance.NextPlatform.TriggerPerfectFeedback();
-        ScoreManager.Instance.AddPoint(perfect: true);
+        ScoreManager.Instance.AddPerfectPoint();
         UIManager.Instance.ShowPerfect();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
     private void OnFail()
     {
-        ScoreManager.Instance.ResetCombo();
+        ScoreManager.Instance.OnFail();
         PlayerController.Instance.FallDown();
     }
 
