@@ -37,11 +37,11 @@ public class MenuManager : MonoBehaviour
     }
 
     // ── Botoes secundarios ─────────────────────────────
-    public void OnLojaClick()      => AbrirPainel(painelLoja);
-    public void OnRankingClick()   => AbrirPainel(painelRanking);
-    public void OnDesafiosClick()  => AbrirPainel(painelDesafios);
-    public void OnOpcoesClick()    => AbrirPainel(painelOpcoes);
-    public void OnPerfilClick()    => AbrirPainel(painelPerfil);
+    public void OnLojaClick()     { AbrirPainel(painelLoja);     }
+    public void OnRankingClick()  { AbrirPainel(painelRanking);  }
+    public void OnDesafiosClick() { AbrirPainel(painelDesafios); }
+    public void OnOpcoesClick()   { AbrirPainel(painelOpcoes);   }
+    public void OnPerfilClick()   { AbrirPainel(painelPerfil);   }
 
     public void FecharTodosPaineis()
     {

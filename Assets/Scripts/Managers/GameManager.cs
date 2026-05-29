@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // A plataforma inicial ja esta na cena — encontra ela
-        CurrentPlatform = FindFirstObjectByType<Platform>();
+        CurrentPlatform = FindAnyObjectByType<Platform>();
         SpawnNextPlatform();
     }
 
