@@ -77,6 +77,7 @@ public class BridgeController : MonoBehaviour
         State        = BridgeState.Growing;
         BridgeLength = 0f;
         fallAngle    = 0f;
+        if (AudioManager.Instance) AudioManager.Instance.PlayGrowingStart();
 
         Platform current = GameManager.Instance.CurrentPlatform;
         Vector3 pivotPos = new Vector3(current.RightEdge, current.TopEdge, 0f);
@@ -105,6 +106,8 @@ public class BridgeController : MonoBehaviour
     private void StartFalling()
     {
         State = BridgeState.Falling;
+        if (AudioManager.Instance) AudioManager.Instance.PlayGrowingStop();
+        if (AudioManager.Instance) AudioManager.Instance.PlayFall();
     }
 
     private void RotateBridge()
