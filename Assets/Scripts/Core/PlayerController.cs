@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
         Instance = this;
     }
 
+    // ── Movimento ──────────────────────────────────────
+
     private void Update()
     {
         if (isWalking) HandleWalking();
@@ -27,7 +29,6 @@ public class PlayerController : MonoBehaviour
     private void HandleWalking()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, walkSpeed * Time.deltaTime);
-
         if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
             transform.position = targetPosition;
@@ -39,7 +40,6 @@ public class PlayerController : MonoBehaviour
     private void HandleFalling()
     {
         transform.position += Vector3.down * fallSpeed * Time.deltaTime;
-
         if (transform.position.y < -12f)
         {
             isFalling = false;
@@ -47,28 +47,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Chamado pelo BridgeVerifier quando a ponte alcanca a plataforma
     public void WalkToNextPlatform()
     {
-        Platform next = GameManager.Instance.NextPlatform;
-
-        // Posiciona o jogador em cima da proxima plataforma
-        float standX = next.LeftEdge + 0.5f;
-        float standY = next.TopEdge + 0.3f; // 0.3 = meia altura da capsula escalada
-
+        Platform next  = GameManager.Instance.NextPlatform;
+        float standX   = next.LeftEdge + 0.5f;
+        float standY   = next.TopEdge + 0.3f;
         targetPosition = new Vector3(standX, standY, 0f);
-        isWalking = true;
+        isWalking      = true;
     }
 
-    // Chamado pelo BridgeVerifier quando a ponte falha
-    public void FallDown()
-    {
-        isFalling = true;
-    }
+    public void FallDown() => isFalling = true;
 
     private void OnArrived()
     {
-        // Avanca o jogo: proxima plataforma vira atual, nova e gerada
         GameManager.Instance.AdvanceToNextPlatform();
         BridgeController.Instance.ResetBridge();
         BridgeVerifier.Instance.ResetVerifier();

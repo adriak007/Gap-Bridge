@@ -12,14 +12,15 @@ public class Platform : MonoBehaviour
     public float LeftEdge  => transform.position.x - Width / 2f;
     public float TopEdge   => transform.position.y + transform.localScale.y / 2f;
 
+    public float PerfectLeftEdge  => transform.position.x - perfectZoneWidth / 2f;
+    public float PerfectRightEdge => transform.position.x + perfectZoneWidth / 2f;
+
     private void Start()
     {
         if (perfectZoneVisual != null)
             PositionPerfectZone();
     }
 
-    // Posiciona e escala a faixa no topo do pilar,
-    // compensando a escala nao-uniforme do pai
     private void PositionPerfectZone()
     {
         Vector3 s = transform.localScale;
@@ -30,9 +31,6 @@ public class Platform : MonoBehaviour
             1.1f  / s.z
         );
     }
-
-    public float PerfectLeftEdge  => transform.position.x - perfectZoneWidth / 2f;
-    public float PerfectRightEdge => transform.position.x + perfectZoneWidth / 2f;
 
     public void TriggerPerfectFeedback()
     {
