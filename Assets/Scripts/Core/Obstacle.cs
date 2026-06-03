@@ -2,13 +2,25 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
-    {
-        // Verifica se encostou no player
-        if (other.GetComponent<PlayerController>() == null) return;
+    [SerializeField] private float hitRangeX = 0.22f;
+    [SerializeField] private float hitRangeY = 0.28f;
 
-        // So derruba se o player estiver no chao (nao pulando)
-        if (PlayerController.Instance.IsOnGround)
-            PlayerController.Instance.FallDown();
+    private bool atingiu = false;
+
+    private void Update()
+    {
+        if (atingiu) return;
+        if (PlayerController.Instance == null) return;
+        if (!PlayerController.Instance.IsOnGround) return;
+
+        Vector3 playerPos   = PlayerController.Instance.transform.position;
+        float   distX       = Mathf.Abs(playerPos.x - transform.position.x);
+        float   distY       = Mathf.Abs(playerPos.y - transform.position.y);
+
+        if (distX < hitRangeX && distY < hitRangeY)
+        {
+            atingiu = true;
+            PlayerController.Instance.HitObstacle();
+        }
     }
 }

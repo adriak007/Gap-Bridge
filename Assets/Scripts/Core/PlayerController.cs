@@ -111,8 +111,21 @@ public class PlayerController : MonoBehaviour
 
     public void FallDown()
     {
+        isWalking        = false;
+        jumpVelocity     = 0f;
+        jumpYOffset      = 0f;
         currentFallSpeed = fallSpeed;
         isFalling        = true;
+    }
+
+    // Chamado pelo obstáculo — igual ao fail normal com todos os efeitos
+    public void HitObstacle()
+    {
+        ScoreManager.Instance.OnFail();
+        if (AudioManager.Instance)  AudioManager.Instance.PlayFail();
+        if (ScreenEffects.Instance) ScreenEffects.Instance.ShakeCamera();
+        if (ScreenEffects.Instance) ScreenEffects.Instance.FlashRed();
+        FallDown();
     }
 
     private void OnArrived()
