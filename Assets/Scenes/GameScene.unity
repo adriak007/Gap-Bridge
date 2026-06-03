@@ -406,7 +406,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   walkSpeed: 4
-  fallSpeed: 6
+  fallSpeed: 1
+  fallAcceleration: 1
+  jumpHeight: 2
+  jumpDuration: 0.3
 --- !u!1 &334872596
 GameObject:
   m_ObjectHideFlags: 0

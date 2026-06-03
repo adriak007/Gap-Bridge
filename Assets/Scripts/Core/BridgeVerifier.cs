@@ -40,7 +40,8 @@ public class BridgeVerifier : MonoBehaviour
     private void OnSuccess()
     {
         ScoreManager.Instance.AddNormalPoint();
-        if (AudioManager.Instance) AudioManager.Instance.PlaySuccess();
+        if (AudioManager.Instance)    AudioManager.Instance.PlaySuccess();
+        if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
@@ -51,6 +52,7 @@ public class BridgeVerifier : MonoBehaviour
         UIManager.Instance.ShowPerfect();
         if (AudioManager.Instance)    AudioManager.Instance.PlayPerfect();
         if (ScreenEffects.Instance)   ScreenEffects.Instance.FlashWhite();
+        if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
         PlayerController.Instance.WalkToNextPlatform();
     }
 

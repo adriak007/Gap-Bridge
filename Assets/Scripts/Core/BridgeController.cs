@@ -125,11 +125,8 @@ public class BridgeController : MonoBehaviour
         pivotTransform.eulerAngles = new Vector3(0f, 0f, fallAngle);
     }
 
-    // Retorna a posicao da ponta da ponte (usada no Passo 4 para verificacao)
-    public float GetBridgeTipX()
-    {
-        return pivotTransform.position.x + BridgeLength;
-    }
+    public float GetBridgeTipX()   => pivotTransform.position.x + BridgeLength;
+    public float GetBridgePivotX() => pivotTransform.position.x;
 
     public void ResetBridge()
     {
