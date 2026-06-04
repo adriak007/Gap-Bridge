@@ -328,7 +328,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -408,8 +408,8 @@ MonoBehaviour:
   walkSpeed: 4
   fallSpeed: 1
   fallAcceleration: 1
-  jumpHeight: 2
-  jumpDuration: 0.3
+  jumpForce: 8
+  jumpGravity: 22
 --- !u!1 &334872596
 GameObject:
   m_ObjectHideFlags: 0
@@ -2348,6 +2348,7 @@ GameObject:
   - component: {fileID: 2082051520}
   - component: {fileID: 2082051522}
   - component: {fileID: 2082051523}
+  - component: {fileID: 2082051524}
   m_Layer: 0
   m_Name: '--- MANAGERS --- '
   m_TagString: Untagged
@@ -2414,6 +2415,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f7acb599b0219646a9f0d68570dc30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThemeManager
+--- !u!114 &2082051524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082051518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4916e12b7c14b414f8c3b2b9654125e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObstacleSpawner
+  obstaclePrefab: {fileID: 1520140973798007495, guid: 2f99de62da1a2c94ea4c9a415655c06b, type: 3}
+  scoreParaPrimeiro: 5
+  scoreParaDois: 20
+  chanceObstaculo: 0.6
 --- !u!1 &2130505469
 GameObject:
   m_ObjectHideFlags: 0
