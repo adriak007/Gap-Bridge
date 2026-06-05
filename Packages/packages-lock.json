@@ -11,6 +11,16 @@
       },
       "url": "https://package.openupm.com"
     },
+    "com.ivanmurzak.unity.mcp.animation": {
+      "version": "1.2.15",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.ivanmurzak.unity.mcp": "0.79.0",
+        "com.unity.modules.animation": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.unity.adaptiveperformance": {
       "version": "6.0.0",
       "depth": 1,
