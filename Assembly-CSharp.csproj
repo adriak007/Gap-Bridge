@@ -1410,6 +1410,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Notifications.iOS.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Extensions.Unity.PlayerPrefsEx">
+      <HintPath>Library\ScriptAssemblies\Extensions.Unity.PlayerPrefsEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
       <Private>False</Private>

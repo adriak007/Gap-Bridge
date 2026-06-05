@@ -40,10 +40,10 @@ public class Platform : MonoBehaviour
 
     private IEnumerator FlashRoutine()
     {
-        Renderer rend = perfectZoneVisual.GetComponent<Renderer>();
-        Color original = rend.material.color;
-        rend.material.color = Color.white;
+        SpriteRenderer sr = perfectZoneVisual.GetComponent<SpriteRenderer>();
+        Color original = sr.color;
+        sr.color = Color.white;
         yield return new WaitForSeconds(0.35f);
-        rend.material.color = original;
+        sr.color = original;
     }
 }
