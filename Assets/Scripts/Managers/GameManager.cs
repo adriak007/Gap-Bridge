@@ -59,6 +59,11 @@ public class GameManager : MonoBehaviour
         obj.name = "Platform_Next";
 
         NextPlatform = obj.GetComponent<Platform>();
+
+        // Mostra o obstacle no gap assim que a plataforma aparece,
+        // para o player já saber onde vai precisar pular.
+        if (ObstacleSpawner.Instance)
+            ObstacleSpawner.Instance.SpawnNoGap(NextPlatform);
     }
 
     public void AdvanceToNextPlatform()

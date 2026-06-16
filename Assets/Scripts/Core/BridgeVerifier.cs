@@ -4,8 +4,7 @@ public class BridgeVerifier : MonoBehaviour
 {
     public static BridgeVerifier Instance { get; private set; }
 
-    private bool verified        = false;
-    private bool obstacleSpawned = false;
+    private bool verified = false;
 
     private void Awake()
     {
@@ -15,15 +14,6 @@ public class BridgeVerifier : MonoBehaviour
 
     private void Update()
     {
-        // Spawna o obstáculo assim que o player solta a ponte (começa a cair).
-        // O obstáculo fica visível durante toda a animação de queda (~0.45s),
-        // dando tempo do player planejar onde vai pular.
-        if (!obstacleSpawned && BridgeController.Instance.State == BridgeState.Falling)
-        {
-            obstacleSpawned = true;
-            if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
-        }
-
         if (!verified && BridgeController.Instance.State == BridgeState.Done)
         {
             verified = true;
@@ -75,7 +65,6 @@ public class BridgeVerifier : MonoBehaviour
 
     public void ResetVerifier()
     {
-        verified        = false;
-        obstacleSpawned = false;
+        verified = false;
     }
 }

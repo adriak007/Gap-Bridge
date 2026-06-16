@@ -21,36 +21,37 @@ public class ObstacleSpawner : MonoBehaviour
         Instance = this;
     }
 
-    public void SpawnNaPonte()
+    // Chamado assim que a próxima plataforma é gerada — o obstacle aparece
+    // no espaço entre as duas plataformas antes de a ponte existir.
+    public void SpawnNoGap(Platform proximaPlat)
     {
         int score = ScoreManager.Instance != null ? ScoreManager.Instance.Score : 0;
         if (score < scoreParaPrimeiro) return;
         if (Random.value > chanceObstaculo) return;
 
-        float pivotX    = BridgeController.Instance.GetBridgePivotX();
-        float tipX      = BridgeController.Instance.GetBridgeTipX();
-        float bridgeY   = GameManager.Instance.CurrentPlatform.TopEdge;
-        float bridgeLen = tipX - pivotX;
+        Platform atual = GameManager.Instance.CurrentPlatform;
+        float gapStart = atual.RightEdge;
+        float gapEnd   = proximaPlat.LeftEdge;
+        float gapLen   = gapEnd - gapStart;
 
-        // Margens seguras: longe do player (início) e longe da borda da plataforma (fim)
-        const float MARGEM_INICIO = 1.1f; // espaço para o player começar a andar
-        const float MARGEM_FIM    = 0.9f; // espaço para pousar sem colidir
+        // Margens: longe do player no início, longe da plataforma de chegada no fim
+        const float MARGEM_INICIO = 1.0f;
+        const float MARGEM_FIM    = 0.7f;
 
-        float spanUtil = bridgeLen - MARGEM_INICIO - MARGEM_FIM;
-        if (spanUtil < 0.4f) return; // ponte curta demais — não spawna
+        float spanUtil = gapLen - MARGEM_INICIO - MARGEM_FIM;
+        if (spanUtil < 0.3f) return; // gap pequeno demais
 
-        int quantidade = score >= scoreParaDois && Random.value > 0.5f ? 2 : 1;
+        float y          = atual.TopEdge + 0.175f;
+        int   quantidade = score >= scoreParaDois && Random.value > 0.5f ? 2 : 1;
 
         for (int i = 0; i < quantidade; i++)
         {
             float zoneSize  = spanUtil / quantidade;
-            float zoneStart = pivotX + MARGEM_INICIO + zoneSize * i;
+            float zoneStart = gapStart + MARGEM_INICIO + zoneSize * i;
             float zoneEnd   = zoneStart + zoneSize;
-
             if (zoneEnd - zoneStart < 0.2f) continue;
 
-            float x   = Random.Range(zoneStart, zoneEnd);
-            float y   = bridgeY + 0.175f;
+            float x = Random.Range(zoneStart, zoneEnd);
             ativos.Add(Instantiate(obstaclePrefab, new Vector3(x, y, 0f), Quaternion.identity));
         }
     }
