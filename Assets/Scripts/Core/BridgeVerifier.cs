@@ -4,7 +4,8 @@ public class BridgeVerifier : MonoBehaviour
 {
     public static BridgeVerifier Instance { get; private set; }
 
-    private bool verified = false;
+    private bool verified        = false;
+    private bool obstacleSpawned = false;
 
     private void Awake()
     {
@@ -14,6 +15,15 @@ public class BridgeVerifier : MonoBehaviour
 
     private void Update()
     {
+        // Spawna o obstáculo assim que o player solta a ponte (começa a cair).
+        // O obstáculo fica visível durante toda a animação de queda (~0.45s),
+        // dando tempo do player planejar onde vai pular.
+        if (!obstacleSpawned && BridgeController.Instance.State == BridgeState.Falling)
+        {
+            obstacleSpawned = true;
+            if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
+        }
+
         if (!verified && BridgeController.Instance.State == BridgeState.Done)
         {
             verified = true;
@@ -40,8 +50,7 @@ public class BridgeVerifier : MonoBehaviour
     private void OnSuccess()
     {
         ScoreManager.Instance.AddNormalPoint();
-        if (AudioManager.Instance)    AudioManager.Instance.PlaySuccess();
-        if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
+        if (AudioManager.Instance)  AudioManager.Instance.PlaySuccess();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
@@ -50,9 +59,8 @@ public class BridgeVerifier : MonoBehaviour
         GameManager.Instance.NextPlatform.TriggerPerfectFeedback();
         ScoreManager.Instance.AddPerfectPoint();
         UIManager.Instance.ShowPerfect();
-        if (AudioManager.Instance)    AudioManager.Instance.PlayPerfect();
-        if (ScreenEffects.Instance)   ScreenEffects.Instance.FlashWhite();
-        if (ObstacleSpawner.Instance) ObstacleSpawner.Instance.SpawnNaPonte();
+        if (AudioManager.Instance)  AudioManager.Instance.PlayPerfect();
+        if (ScreenEffects.Instance) ScreenEffects.Instance.FlashWhite();
         PlayerController.Instance.WalkToNextPlatform();
     }
 
@@ -67,6 +75,7 @@ public class BridgeVerifier : MonoBehaviour
 
     public void ResetVerifier()
     {
-        verified = false;
+        verified        = false;
+        obstacleSpawned = false;
     }
 }

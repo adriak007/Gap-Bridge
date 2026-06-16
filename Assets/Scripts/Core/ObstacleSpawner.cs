@@ -24,34 +24,34 @@ public class ObstacleSpawner : MonoBehaviour
     public void SpawnNaPonte()
     {
         int score = ScoreManager.Instance != null ? ScoreManager.Instance.Score : 0;
-
-        // Abaixo do score minimo nao spawna
         if (score < scoreParaPrimeiro) return;
-
-        // Chance de nao spawnar nenhum
         if (Random.value > chanceObstaculo) return;
 
-        float pivotX      = BridgeController.Instance.GetBridgePivotX();
-        float tipX        = BridgeController.Instance.GetBridgeTipX();
-        float bridgeY     = GameManager.Instance.CurrentPlatform.TopEdge;
-        float bridgeLen   = tipX - pivotX;
+        float pivotX    = BridgeController.Instance.GetBridgePivotX();
+        float tipX      = BridgeController.Instance.GetBridgeTipX();
+        float bridgeY   = GameManager.Instance.CurrentPlatform.TopEdge;
+        float bridgeLen = tipX - pivotX;
 
-        // Quantidade de obstaculos baseada no score
+        // Margens seguras: longe do player (início) e longe da borda da plataforma (fim)
+        const float MARGEM_INICIO = 1.1f; // espaço para o player começar a andar
+        const float MARGEM_FIM    = 0.9f; // espaço para pousar sem colidir
+
+        float spanUtil = bridgeLen - MARGEM_INICIO - MARGEM_FIM;
+        if (spanUtil < 0.4f) return; // ponte curta demais — não spawna
+
         int quantidade = score >= scoreParaDois && Random.value > 0.5f ? 2 : 1;
 
         for (int i = 0; i < quantidade; i++)
         {
-            // Divide a ponte em zonas para evitar sobreposicao
-            float zoneSize = bridgeLen / quantidade;
-            float zoneStart = pivotX + 0.5f + zoneSize * i;
-            float zoneEnd   = zoneStart + zoneSize - 0.5f;
+            float zoneSize  = spanUtil / quantidade;
+            float zoneStart = pivotX + MARGEM_INICIO + zoneSize * i;
+            float zoneEnd   = zoneStart + zoneSize;
 
-            if (zoneEnd <= zoneStart) continue;
+            if (zoneEnd - zoneStart < 0.2f) continue;
 
             float x   = Random.Range(zoneStart, zoneEnd);
-            float y   = bridgeY + 0.175f; // meia altura do obstaculo
-            var   obj = Instantiate(obstaclePrefab, new Vector3(x, y, 0f), Quaternion.identity);
-            ativos.Add(obj);
+            float y   = bridgeY + 0.175f;
+            ativos.Add(Instantiate(obstaclePrefab, new Vector3(x, y, 0f), Quaternion.identity));
         }
     }
 
