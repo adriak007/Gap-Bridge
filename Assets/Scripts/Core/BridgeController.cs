@@ -91,6 +91,8 @@ public class BridgeController : MonoBehaviour
         GameObject bridge = Instantiate(bridgePrefab, pivotTransform);
         bridge.transform.localPosition = Vector3.zero;
         bridge.transform.localScale    = new Vector3(0.15f, 0f, 0.15f);
+        var bridgeSR = bridge.GetComponent<SpriteRenderer>();
+        if (bridgeSR) bridgeSR.sortingOrder = 4; // acima do topo da plataforma, abaixo do player
     }
 
     private void GrowBridge()

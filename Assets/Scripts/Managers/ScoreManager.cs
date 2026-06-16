@@ -77,6 +77,28 @@ public class ScoreManager : MonoBehaviour
         int current = PlayerPrefs.GetInt("BestScore", 0);
         if (Score > current)
             PlayerPrefs.SetInt("BestScore", Score);
+
+        // Award coins: 1 moeda por ponto
+        int coins = PlayerPrefs.GetInt("Coins", 0) + Mathf.Max(Score, 0);
+        PlayerPrefs.SetInt("Coins", coins);
+
+        AddToTopScores(Score);
         PlayerPrefs.Save();
+    }
+
+    private void AddToTopScores(int score)
+    {
+        if (score <= 0) return;
+        var scores = new System.Collections.Generic.List<int>();
+        for (int i = 0; i < 5; i++)
+        {
+            int s = PlayerPrefs.GetInt("TopScore_" + i, 0);
+            if (s > 0) scores.Add(s);
+        }
+        scores.Add(score);
+        scores.Sort((a, b) => b.CompareTo(a));
+        if (scores.Count > 5) scores.RemoveRange(5, scores.Count - 5);
+        for (int i = 0; i < scores.Count; i++)
+            PlayerPrefs.SetInt("TopScore_" + i, scores[i]);
     }
 }

@@ -36,6 +36,21 @@ public class AudioManager : MonoBehaviour
             musicSource.volume = 0.4f;
             musicSource.Play();
         }
+
+        musicSource.mute   = PlayerPrefs.GetInt("MusicOn", 1) == 0;
+        sfxSource.mute     = PlayerPrefs.GetInt("SFXOn",   1) == 0;
+        growingSource.mute = PlayerPrefs.GetInt("SFXOn",   1) == 0;
+    }
+
+    public void SetMusicEnabled(bool on)
+    {
+        musicSource.mute = !on;
+    }
+
+    public void SetSFXEnabled(bool on)
+    {
+        sfxSource.mute     = !on;
+        growingSource.mute = !on;
     }
 
     // ── Ponte ──────────────────────────────────────────

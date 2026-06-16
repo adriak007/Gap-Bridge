@@ -30,6 +30,61 @@ public class PlayerController : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        CreatePlayerVisuals();
+        ApplySkinColor(PlayerPrefs.GetString("EquippedSkin", "skin_0"));
+    }
+
+    private static readonly string[]  SkinKeys   = { "skin_0","skin_1","skin_2","skin_3","skin_4","skin_5" };
+    private static readonly Color32[] SkinColors =
+    {
+        new Color32(255, 255, 255, 255),
+        new Color32(255, 100,  30, 255),
+        new Color32(100, 200, 255, 255),
+        new Color32(255, 215,   0, 255),
+        new Color32( 80,  80,  80, 255),
+        new Color32(  0, 255, 120, 255),
+    };
+
+    private void CreatePlayerVisuals()
+    {
+        var bodySR = GetComponent<SpriteRenderer>();
+        if (!bodySR) return;
+
+        bodySR.sortingOrder = 5; // acima de todas as camadas da plataforma
+
+        if (transform.Find("PlayerHead")) return;
+
+        var head = new GameObject("PlayerHead");
+        head.transform.SetParent(transform, false);
+        head.transform.localPosition = new Vector3(0f, 0.7f, 0f);
+        head.transform.localScale    = new Vector3(0.72f, 0.58f, 1f);
+
+        var headSR = head.AddComponent<SpriteRenderer>();
+        headSR.sprite       = bodySR.sprite;
+        headSR.color        = bodySR.color;
+        headSR.sortingOrder = 6;
+    }
+
+    private void ApplySkinColor(string key)
+    {
+        var sr = GetComponent<SpriteRenderer>();
+        if (!sr) return;
+        for (int i = 0; i < SkinKeys.Length; i++)
+        {
+            if (SkinKeys[i] != key) continue;
+            sr.color = SkinColors[i];
+            var headT = transform.Find("PlayerHead");
+            if (headT)
+            {
+                var headSR = headT.GetComponent<SpriteRenderer>();
+                if (headSR) headSR.color = SkinColors[i];
+            }
+            return;
+        }
+    }
+
     private void Update()
     {
         if (isWalking)
