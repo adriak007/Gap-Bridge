@@ -153,7 +153,7 @@ public class UIManager : MonoBehaviour
         float t = 0f;
         while (t < 1f)
         {
-            t += Time.unscaledDeltaTime / 0.4f;
+            t += Time.unscaledDeltaTime / 0.2f;
             cg.alpha = Mathf.Clamp01(t);
             yield return null;
         }

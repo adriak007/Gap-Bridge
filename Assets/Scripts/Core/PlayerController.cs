@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movimento")]
     [SerializeField] private float walkSpeed        = 4f;
-    [SerializeField] private float fallSpeed        = 10f;
-    [SerializeField] private float fallAcceleration = 18f;
+    [SerializeField] private float fallSpeed        = 16f;
+    [SerializeField] private float fallAcceleration = 30f;
 
     [Header("Pulo")]
     [SerializeField] private float jumpForce   = 11f;
@@ -145,7 +145,7 @@ public class PlayerController : MonoBehaviour
         currentFallSpeed   += fallAcceleration * Time.deltaTime;
         transform.position += Vector3.down * currentFallSpeed * Time.deltaTime;
 
-        if (transform.position.y < -12f)
+        if (transform.position.y < -9f)
         {
             isFalling = false;
             OnGameOver();
