@@ -194,6 +194,7 @@ public class PlayerController : MonoBehaviour
     private void OnGameOver()
     {
         ScoreManager.Instance.SaveHighScore();
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MenuScene");
+        int best = PlayerPrefs.GetInt("BestScore", 0);
+        UIManager.Instance.ShowGameOver(ScoreManager.Instance.Score, best);
     }
 }

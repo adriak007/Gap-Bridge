@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
 
@@ -17,6 +18,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text  comboText;
     [SerializeField] private Image     comboTimerBar;
     [SerializeField] private GameObject comboContainer;
+
+    [Header("Game Over")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TMP_Text   gameOverScoreText;
+    [SerializeField] private TMP_Text   gameOverBestText;
 
     private Vector3 perfectOriginalPos;
     private CanvasGroup perfectCanvasGroup;
@@ -36,6 +42,7 @@ public class UIManager : MonoBehaviour
 
         perfectText.gameObject.SetActive(false);
         comboContainer.SetActive(false);
+        if (gameOverPanel) gameOverPanel.SetActive(false);
         UpdateScore(0);
     }
 
@@ -125,5 +132,43 @@ public class UIManager : MonoBehaviour
         const float c1 = 1.70158f;
         const float c3 = c1 + 1f;
         return 1f + c3 * Mathf.Pow(t - 1f, 3f) + c1 * Mathf.Pow(t - 1f, 2f);
+    }
+
+    // ── Game Over ──────────────────────────────────────
+    public void ShowGameOver(int score, int best)
+    {
+        if (gameOverPanel)     gameOverPanel.SetActive(true);
+        if (gameOverScoreText) gameOverScoreText.text = score.ToString();
+        if (gameOverBestText)  gameOverBestText.text  = best > 0 ? "Melhor: " + best : "";
+        Time.timeScale = 0f;
+        StartCoroutine(AnimateGameOverIn());
+    }
+
+    private IEnumerator AnimateGameOverIn()
+    {
+        if (!gameOverPanel) yield break;
+        var cg = gameOverPanel.GetComponent<CanvasGroup>();
+        if (!cg) cg = gameOverPanel.AddComponent<CanvasGroup>();
+        cg.alpha = 0f;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / 0.4f;
+            cg.alpha = Mathf.Clamp01(t);
+            yield return null;
+        }
+        cg.alpha = 1f;
+    }
+
+    public void OnRestartClick()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void OnMenuClick()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MenuScene");
     }
 }
