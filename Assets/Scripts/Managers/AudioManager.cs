@@ -71,8 +71,6 @@ public class AudioManager : MonoBehaviour
     public void PlaySuccess() => Play(sfxSuccess, 1.0f);
     public void PlayPerfect() => Play(sfxPerfect, 1.0f);
     public void PlayFail()    => Play(sfxFail,    1.0f);
-    public void PlayCombo()   => Play(sfxCombo,   0.9f);
-
     // ── Helpers ────────────────────────────────────────
     private void Play(AudioClip clip, float volume)
     {
