@@ -12,8 +12,9 @@ public class BridgeController : MonoBehaviour
     [SerializeField] private float growSpeed = 3f;
     [SerializeField] private float fallSpeed = 200f; // graus por segundo
 
-    public BridgeState State { get; private set; } = BridgeState.Idle;
-    public float BridgeLength { get; private set; }
+    public BridgeState State       { get; private set; } = BridgeState.Idle;
+    public float       BridgeLength { get; private set; }
+    public bool        LockRelease  { get; set; } = false;
 
     private Transform pivotTransform;
     private float fallAngle;
@@ -53,7 +54,7 @@ public class BridgeController : MonoBehaviour
         }
 
         if (pressed  && State == BridgeState.Idle)    StartGrowing();
-        if (released && State == BridgeState.Growing) StartFalling();
+        if (released && State == BridgeState.Growing && !LockRelease) StartFalling();
     }
 
     private void StartGrowing()
@@ -125,6 +126,11 @@ public class BridgeController : MonoBehaviour
         }
 
         pivotTransform.eulerAngles = new Vector3(0f, 0f, fallAngle);
+    }
+
+    public void ForceStopGrowing()
+    {
+        if (State == BridgeState.Growing) StartFalling();
     }
 
     public float GetBridgeTipX()   => pivotTransform.position.x + BridgeLength;

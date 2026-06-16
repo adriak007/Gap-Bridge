@@ -93,6 +93,13 @@ public class MenuManager : MonoBehaviour
         PopulateRanking();
     }
 
+    public void OnTutorialClick()
+    {
+        PlayerPrefs.SetInt("TutorialMode", 1);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("GameScene");
+    }
+
     public void OnOpcoesClick()
     {
         AbrirPainel(painelOpcoes);

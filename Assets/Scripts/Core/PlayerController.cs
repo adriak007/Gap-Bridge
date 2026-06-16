@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private float   jumpVelocity     = 0f;
     private float   jumpYOffset      = 0f;
 
+    public static event System.Action OnArrivedEvent;
+
     public bool IsOnGround => jumpYOffset <= 0.05f;
     private float   groundY          = 0f; // Y base do personagem na plataforma
     private float   targetX          = 0f; // X destino
@@ -189,12 +191,31 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.AdvanceToNextPlatform();
         BridgeController.Instance.ResetBridge();
         BridgeVerifier.Instance.ResetVerifier();
+        if (OnArrivedEvent != null) OnArrivedEvent();
     }
 
     private void OnGameOver()
     {
+        if (TutorialManager.IsActive)
+        {
+            if (TutorialManager.Instance) TutorialManager.Instance.OnPlayerFailed();
+            return;
+        }
         ScoreManager.Instance.SaveHighScore();
         int best = PlayerPrefs.GetInt("BestScore", 0);
         UIManager.Instance.ShowGameOver(ScoreManager.Instance.Score, best);
+    }
+
+    public void TutorialReset(Platform platform)
+    {
+        float y = platform.TopEdge + 0.3f;
+        float x = platform.LeftEdge + 0.5f;
+        transform.position = new Vector3(x, y, 0f);
+        groundY          = y;
+        isWalking        = false;
+        isFalling        = false;
+        jumpVelocity     = 0f;
+        jumpYOffset      = 0f;
+        currentFallSpeed = 0f;
     }
 }

@@ -56,6 +56,14 @@ public class ObstacleSpawner : MonoBehaviour
         }
     }
 
+    public void ForceSpawnCenter(Platform nextPlat)
+    {
+        Platform atual = GameManager.Instance.CurrentPlatform;
+        float x = (atual.RightEdge + nextPlat.LeftEdge) / 2f;
+        float y = atual.TopEdge + 0.175f;
+        ativos.Add(Instantiate(obstaclePrefab, new Vector3(x, y, 0f), Quaternion.identity));
+    }
+
     public void LimparObstaculos()
     {
         foreach (var obj in ativos)
