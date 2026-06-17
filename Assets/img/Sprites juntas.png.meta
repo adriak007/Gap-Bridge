@@ -118,7 +118,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 18, y: 18, z: 18, w: 18}
       customData: 
       outline: []
@@ -140,7 +140,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 18, y: 18, z: 18, w: 18}
       customData: 
       outline: []
@@ -149,6 +149,28 @@ TextureImporter:
       bones: []
       spriteID: 8699cc5ee9986f842b83f1daacb5e99c
       internalID: 862412470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: X btn
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 469
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2903d6febf439a43853c18a56e69f6b
+      internalID: 1899584803
       vertices: []
       indices: 
       edges: []
@@ -169,6 +191,7 @@ TextureImporter:
     nameFileIdTable:
       "Bot\xE3o": 2063069883
       "Bot\xE3oapertado": 862412470
+      X btn: 1899584803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
