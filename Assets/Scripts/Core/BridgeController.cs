@@ -9,20 +9,61 @@ public class BridgeController : MonoBehaviour
 
     [Header("Configuracoes da Ponte")]
     [SerializeField] private GameObject bridgePrefab;
-    [SerializeField] private float growSpeed = 3f;
-    [SerializeField] private float fallSpeed = 200f; // graus por segundo
+    [SerializeField] private float growSpeed  = 3f;
+    [SerializeField] private float fallSpeed  = 200f; // graus por segundo
+    [SerializeField] private float bridgeScaleX = 0.5f; // escala uniforme no eixo X da ponte inteira (espessura)
 
     public BridgeState State       { get; private set; } = BridgeState.Idle;
     public float       BridgeLength { get; private set; }
     public bool        LockRelease  { get; set; } = false;
 
     private Transform pivotTransform;
+    private Transform bridgeTransform;
+    private SpriteRenderer[] bridgeSegmentRenderers;
+    private float[] bridgeSegmentWidths; // largura fixa de cada sprite (sua altura nativa, ja que estao rotacionadas 90)
     private float fallAngle;
 
     private void Awake()
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
+    }
+
+    // Cria o pivo e a ponte uma unica vez; reaproveitados em toda travessia
+    private void EnsureBridgeObjects()
+    {
+        if (pivotTransform != null) return;
+
+        GameObject pivotObj = new GameObject("BridgePivot");
+        pivotTransform = pivotObj.transform;
+
+        GameObject bridge = Instantiate(bridgePrefab, pivotTransform);
+        bridgeTransform = bridge.transform;
+        // Escala X uniforme na ponte inteira (espessura) -- preserva a proporcao entre Planks/Rails
+        bridgeTransform.localScale = new Vector3(bridgeScaleX, 1f, 1f);
+        bridgeSegmentRenderers = bridge.GetComponentsInChildren<SpriteRenderer>();
+
+        // Largura fixa = altura nativa de cada sprite (em unidades), pois cada filho esta
+        // rotacionado 90 graus: a altura original passa a ser a direcao perpendicular ao crescimento
+        bridgeSegmentWidths = new float[bridgeSegmentRenderers.Length];
+        for (int i = 0; i < bridgeSegmentRenderers.Length; i++)
+        {
+            Sprite spr = bridgeSegmentRenderers[i].sprite;
+            bridgeSegmentWidths[i] = spr.rect.height / spr.pixelsPerUnit;
+        }
+
+        pivotObj.SetActive(false);
+    }
+
+    // Atualiza o tamanho via Tiled Draw Mode (repete a sprite) em vez de esticar por escala.
+    // Planks/Rails estao rotacionados 90 graus no Z, entao o eixo local que cresce
+    // (alinhado com o Y do pai, direcao de crescimento) e o X deles, nao o Y.
+    private void SetBridgeSize(float length)
+    {
+        for (int i = 0; i < bridgeSegmentRenderers.Length; i++)
+            bridgeSegmentRenderers[i].size = new Vector2(length, bridgeSegmentWidths[i]);
+
+        bridgeTransform.localPosition = new Vector3(0f, length / 2f, 0f);
     }
 
     private void Update()
@@ -75,6 +116,8 @@ public class BridgeController : MonoBehaviour
             return;
         }
 
+        EnsureBridgeObjects();
+
         State        = BridgeState.Growing;
         BridgeLength = 0f;
         fallAngle    = 0f;
@@ -83,27 +126,19 @@ public class BridgeController : MonoBehaviour
         Platform current = GameManager.Instance.CurrentPlatform;
         Vector3 pivotPos = new Vector3(current.RightEdge, current.TopEdge, 0f);
 
-        // Objeto vazio na borda da plataforma — serve como pivo de rotacao
-        GameObject pivotObj = new GameObject("BridgePivot");
-        pivotObj.transform.position = pivotPos;
-        pivotTransform = pivotObj.transform;
+        // Reposiciona o pivo (ja existente) na borda da plataforma atual
+        pivotTransform.position    = pivotPos;
+        pivotTransform.eulerAngles = Vector3.zero;
+        pivotTransform.gameObject.SetActive(true);
 
-        // Ponte como filho do pivo, comecando com altura zero
-        GameObject bridge = Instantiate(bridgePrefab, pivotTransform);
-        bridge.transform.localPosition = Vector3.zero;
-        bridge.transform.localScale    = new Vector3(0.15f, 0f, 0.15f);
-        var bridgeSR = bridge.GetComponent<SpriteRenderer>();
-        if (bridgeSR) bridgeSR.sortingOrder = 4; // acima do topo da plataforma, abaixo do player
+        // Ponte comecando com comprimento zero
+        SetBridgeSize(0f);
     }
 
     private void GrowBridge()
     {
         BridgeLength += growSpeed * Time.deltaTime;
-
-        Transform bridge = pivotTransform.GetChild(0);
-        bridge.localScale    = new Vector3(0.15f, BridgeLength, 0.15f);
-        // Move para cima junto com o crescimento (pivot na base)
-        bridge.localPosition = new Vector3(0f, BridgeLength / 2f, 0f);
+        SetBridgeSize(BridgeLength);
     }
 
     private void StartFalling()
@@ -139,7 +174,7 @@ public class BridgeController : MonoBehaviour
     public void ResetBridge()
     {
         if (pivotTransform != null)
-            Destroy(pivotTransform.gameObject);
+            pivotTransform.gameObject.SetActive(false);
 
         State = BridgeState.Idle;
     }

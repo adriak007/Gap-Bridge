@@ -34,29 +34,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        CreatePlayerVisuals();
+        var sr = GetComponent<SpriteRenderer>();
+        if (sr) sr.sortingOrder = 5; // acima de todas as camadas da plataforma
         ApplySkinColor(PlayerPrefs.GetString("EquippedSkin", "skin_0"));
-    }
-
-
-    private void CreatePlayerVisuals()
-    {
-        var bodySR = GetComponent<SpriteRenderer>();
-        if (!bodySR) return;
-
-        bodySR.sortingOrder = 5; // acima de todas as camadas da plataforma
-
-        if (transform.Find("PlayerHead")) return;
-
-        var head = new GameObject("PlayerHead");
-        head.transform.SetParent(transform, false);
-        head.transform.localPosition = new Vector3(0f, 0.7f, 0f);
-        head.transform.localScale    = new Vector3(0.72f, 0.58f, 1f);
-
-        var headSR = head.AddComponent<SpriteRenderer>();
-        headSR.sprite       = bodySR.sprite;
-        headSR.color        = bodySR.color;
-        headSR.sortingOrder = 6;
     }
 
     private void ApplySkinColor(string key)
@@ -67,12 +47,6 @@ public class PlayerController : MonoBehaviour
         {
             if (SkinData.Keys[i] != key) continue;
             sr.color = SkinData.Colors[i];
-            var headT = transform.Find("PlayerHead");
-            if (headT)
-            {
-                var headSR = headT.GetComponent<SpriteRenderer>();
-                if (headSR) headSR.color = SkinData.Colors[i];
-            }
             return;
         }
     }
