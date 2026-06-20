@@ -10,6 +10,9 @@ public class Platform : MonoBehaviour
     [Header("Visual do Topo (capa)")]
     [SerializeField] private GameObject topCapRoot;
 
+    [Header("Visual do Corpo (preenchimento)")]
+    [SerializeField] private GameObject bodyFill;
+
     public float Width     => transform.localScale.x;
     public float RightEdge => transform.position.x + Width / 2f;
     public float LeftEdge  => transform.position.x - Width / 2f;
@@ -26,6 +29,27 @@ public class Platform : MonoBehaviour
             PositionPerfectZone();
         if (topCapRoot != null)
             PositionTopCap();
+        if (bodyFill != null)
+            PositionBodyFill();
+    }
+
+    // Preenche tudo que fica abaixo da capa (o pilar que desce 8 unidades) com a
+    // textura de pedra/terra repetida (tiled), em vez de cor solida
+    private void PositionBodyFill()
+    {
+        Vector3 s = transform.localScale;
+        float w = s.x;
+        float h = s.y;
+
+        float capScale     = Mathf.Min(1f, w / 2f);
+        float bodyHeight   = Mathf.Max(0.01f, h - capScale);
+        float bodyCenterY  = -capScale / 2f;
+
+        bodyFill.transform.localScale    = new Vector3(1f / w, 1f / h, 1f);
+        bodyFill.transform.localPosition = new Vector3(0f, bodyCenterY / h, 0f);
+
+        var sr = bodyFill.GetComponent<SpriteRenderer>();
+        if (sr) sr.size = new Vector2(w, bodyHeight);
     }
 
     // Posiciona as 3 pecas do topo (esquerda/meio tiled/direita) compensando a
