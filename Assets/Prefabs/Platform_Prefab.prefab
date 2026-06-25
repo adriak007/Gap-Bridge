@@ -139,8 +139,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Platform
   perfectZoneWidth: 0.4
   perfectZoneVisual: {fileID: 7129848910737004258}
-  topCapRoot: {fileID: 0}
-  bodyFill: {fileID: 0}
 --- !u!212 &7170613295911398864
 SpriteRenderer:
   serializedVersion: 2
